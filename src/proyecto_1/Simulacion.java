@@ -8,20 +8,24 @@ public class Simulacion {
     private AgenteBase recolectoras;
     private AgenteBase defensoras;
     private Amenazas amenazas;
+    private static int contadorRecursos = 0;
     private static Recolectores[] listaRecolectores;
     private static Defensores[] listaDefensores;
+    private static Amenazas[] listaAmenazas;
     
     
     public Simulacion(){
         listaRecolectores = new Recolectores[8];
         listaDefensores = new Defensores[8];
+        listaAmenazas = new Amenazas[7];
         Prueba = new Ventana();
+        generarAmenazas();
         crearRecolectores();
         crearDefensores();
         generarBase = new Base();
-        generarRecursos = new Recursos();
+        generarRecursos = new Recursos(5);
         generarObstaculos = new Obstaculos();
-        amenazas = new Amenazas();
+        System.out.println("Fila " + listaAmenazas[5].fila + "Columna " + listaAmenazas[5].columna);
     }
     
     public boolean verificarEspacio(int fila, int columna){
@@ -56,11 +60,39 @@ public class Simulacion {
         }
     }
     
+    private void generarAmenazas() {
+        int contador = 0;
+        int fila = 0;
+        int columna = 0;
+        
+        while (contador < 7){
+            fila = (int) (Math.random() * (42-4) + 4);
+            columna= (int) (Math.random() * (47-4) + 4);
+
+            if (verificarEspacio(fila,columna)){
+                listaAmenazas[contador] = new Amenazas(fila, columna);
+                contador ++;
+            }
+        }
+    }
+
     public static Recolectores[] GetlistaRecolectores(){
         return listaRecolectores;
     }
     
     public static Defensores[] GetlistaDefensores(){
         return listaDefensores;
+    }
+    
+    public static Amenazas[] GetlistaAmenazas(){
+        return listaAmenazas;
+    }
+    
+    public static int GetContador(){
+        return contadorRecursos;
+    }
+    
+    public static void SetContador(int numero){
+        contadorRecursos = numero;
     }
 }

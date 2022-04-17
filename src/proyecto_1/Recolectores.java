@@ -91,8 +91,7 @@ public class Recolectores extends AgenteBase{
                 
                 break;
                 
-            case 2:
-                
+            case 2:  
                 if (comparacionPorAbajo(filaHormiga, columnaHormiga) != 0)
                     direccion = 2;
                 

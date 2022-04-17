@@ -7,14 +7,14 @@ public class Recursos extends Objetos{
     private ImageIcon imagenRecurso;
     public static Color fondoRecurso = new Color(0,255,128);
     
-    public Recursos(){
+    public Recursos(int cantidadRecursos){
         imagenRecurso = new ImageIcon("recurso.jpg");
-        generar();
+        generar(cantidadRecursos);
     }
     
-    public void generar(){
+    public void generar(int cantidad){
         int contador = 0;
-        while (contador < 5){
+        while (contador < cantidad){
             fila = (int) (Math.random()*(42-4) + 4);
             columna= (int) (Math.random()*(47-4) + 4);
 

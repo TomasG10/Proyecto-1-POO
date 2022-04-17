@@ -8,33 +8,34 @@ public class Amenazas extends Objetos{
     int vida;
     ImageIcon imagenAmenaza;
     public static Color fondoAmenaza;
+    
 
-    public Amenazas() {
+    public Amenazas(int fila, int columna) {
+        this.fila = fila;
+        this.columna = columna;
         this.vida = 10;
         imagenAmenaza = new ImageIcon("fuego.jpg");
         fondoAmenaza = new java.awt.Color(255,128,0);
-        generar();
-    }
-
-    public void generar() {
-        int contador = 0;
-        while (contador < 7){
-            fila = (int) (Math.random() * (42-4) + 4);
-            columna= (int) (Math.random() * (47-4) + 4);
-
-            if (hayEspacio(fila,columna)){
-                pintar(fila,columna);
-                contador ++;
-            }
-        }
-    }
-
-    public boolean hayEspacio(int fila, int columna) {
-        return Ventana.tablero[fila][columna].getBackground().equals(Ventana.colorTablero);
+        pintar(fila, columna);
     }
 
     public void pintar(int fila, int columna) {
         Ventana.tablero[fila][columna].setBackground(fondoAmenaza);
         Ventana.tablero[fila][columna].setIcon(imagenAmenaza);
+    }
+    
+    public static boolean amenazaEliminada(Amenazas amenaza){
+        
+        if (amenaza.vida == 0){
+            int fila = amenaza.fila;
+            int columna = amenaza.columna;
+            
+            Ventana.tablero[fila][columna].setBackground(Ventana.colorTablero);
+            Ventana.tablero[fila][columna].setIcon(Ventana.fondo);
+            
+            return true;
+        }
+        
+        return false;
     }
 }

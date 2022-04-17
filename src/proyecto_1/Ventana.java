@@ -89,49 +89,50 @@ public class Ventana implements ActionListener{
             
             // Los 3 tipos de movimiento
             if (dirCasoAmenaza != 0 && recolectoraActual.estadoRecurso == false){  // Huir de Amenazas
-                System.out.println("Entro a amenaza");
-                System.out.println("Columna de la hormiga: " + recolectoraActual.columna);
-                System.out.println("Fila de la hormiga: " + recolectoraActual.fila);
                 recolectoraActual.moverAgente(recolectoraActual, dirCasoAmenaza);
             }
             else if (recolectoraActual.estadoRecurso){ // Volver a base
-                System.out.println("VOLVIENDO A BASE");
-                System.out.println("Columna de la hormiga: " + recolectoraActual.columna);
-                System.out.println("Fila de la hormiga: " + recolectoraActual.fila);
                 recolectoraActual.moverAgente(recolectoraActual, Recolectores.volverABase(recolectoraActual));
             }
             else{ // Buscando recursos // Error talvez aca
-                System.out.println("Fila de la hormiga: " + recolectoraActual.fila);
-                System.out.println("Columna de la hormiga: " + recolectoraActual.columna);
-                System.out.println("Direccion a la que dice que me mueva: " + Recolectores.rangoRecolector(recolectoraActual, 3));
                 recolectoraActual.moverAgente(recolectoraActual, Recolectores.rangoRecolector(recolectoraActual, 3));
             }
-            
-            System.out.println("\n");
-            
+                   
             if (llevaraRecurso){
                 recolectoraActual.estadoRecurso = true;
-                System.out.println("Entra");
-                System.out.println("Columna de la hormiga: " + recolectoraActual.columna);
-                System.out.println("Direccion a la que dice que me mueva: " + Recolectores.rangoRecolector(recolectoraActual, 3));
+                Simulacion.SetContador(Simulacion.GetContador()+1);
             }
             llevaraRecurso = false;
         }
         
-        System.out.println("TERMINA RECORRIDO DE LISTA\n\n");
         
         // Recorrer lista Defensores
         for (int posicion=0; posicion < 8; posicion++){
             defensoraActual = listaDefensores[posicion];
-            int dirCasoAmenazaD = 0; // Arreglar posteriormente (Pues no debe de ser 1)
+            
+            if (defensoraActual.estadoRecurso && Defensores.llegoABase(defensoraActual.fila, defensoraActual.columna)){
+                 defensoraActual.estadoRecurso = false;
+            }
+            
+            int dirCasoAmenazaD = Defensores.hayAmenazaCercaDefensores(defensoraActual.fila, defensoraActual.columna, 3);
             
             if (dirCasoAmenazaD == 0){
                 if ( !(defensoraActual.estadoRecurso) && Defensores.llevaRecurso(defensoraActual, Defensores.rangoDefensor(defensoraActual, 3))){
                     llevaraRecurso = true;
                 }        
             }
-            
-            if (!defensoraActual.estadoRecurso){
+
+            // Tipos de movimiento
+            if (dirCasoAmenazaD != 0 && defensoraActual.estadoRecurso == false){  // Acercarse a amenaza
+                int fila = defensoraActual.fila;
+                int columna = defensoraActual.columna;
+                
+                if (Defensores.dirDeAmenaza(fila, columna) != 0)
+                    Defensores.atacandoAmenaza(fila ,columna, Defensores.dirDeAmenaza(fila, columna));
+                
+                defensoraActual.moverAgente(defensoraActual, dirCasoAmenazaD);
+            }
+            else if (!defensoraActual.estadoRecurso){
                 defensoraActual.moverAgente(defensoraActual, Defensores.rangoDefensor(defensoraActual, 3));
             }
             else{
@@ -140,10 +141,17 @@ public class Ventana implements ActionListener{
             
             if (llevaraRecurso){
                 defensoraActual.estadoRecurso = true;
+                Simulacion.SetContador(Simulacion.GetContador()+1);
             }
             llevaraRecurso = false;
         }
+        
+        if (Simulacion.GetContador() == 10){
+            Recursos generarRecursos = new Recursos(1);
+            Simulacion.SetContador(0);
+        }
     }
+    
     
     @Override
     public void actionPerformed(ActionEvent e) {
