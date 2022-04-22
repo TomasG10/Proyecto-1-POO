@@ -6,6 +6,7 @@ abstract class Objetos {
     int fila;
     int columna;
     
+    
     public Objetos(){
     }
 
@@ -13,7 +14,7 @@ abstract class Objetos {
         return false;
     }
 
-    public void generar(){
+    public void generar(int cantidad){
     }
 
     public void pintar(int fila,int columna){

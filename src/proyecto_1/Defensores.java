@@ -8,15 +8,17 @@ public class Defensores extends AgenteBase{
     public Defensores(int fila, int columna) {
         this.fila = fila;
         this.columna = columna;
+        this.alejarHormiga = 10;
         estadoRecurso = false;
         tipoHormiga = new ImageIcon("defensora.jpg");
         fondoHormiga = new Color(255,0,255);
         super.pintarAgente(fila,columna, tipoHormiga, fondoHormiga);
     }
-
-    public static int rangoDefensor(Defensores hormiga ,int radio){
-        int fila = hormiga.fila;
-        int columna= hormiga.columna;
+    
+    
+    // VER SI SE PUEDE HACER LA HERENCIA
+    @Override
+    public  int rangoHormiga(int radio){
         int contador;
 
         // Revision hacia Arriba
@@ -54,87 +56,11 @@ public class Defensores extends AgenteBase{
                }
             }
         }
-
         return 0; // Caso en el que el movimiento no se ve afectado
     }
     
-    public static int volverABase(Defensores hormiga){
-        int filaHormiga = hormiga.fila;
-        int columnaHormiga = hormiga.columna;
-        
-        int filaBase = Base.fila;
-        int columnaBase = Base.columna;
-        
-        int ladoBase =  Base.conocerBase();
-        int direccion = 1000;
-        
-        switch (ladoBase){
-              
-            case 1:
-                if (comparacionPorAbajo(filaHormiga, columnaHormiga) != 0)
-                    direccion = 2;
-                
-                if (comparacionPorDerecha(filaHormiga, columnaHormiga) != 0)
-                    direccion = 3;
-                
-                if (comparacionPorIzquierda(filaHormiga, columnaHormiga) != 0)
-                    direccion = 4;
-                
-                if (comparacionPorArriba(filaHormiga, columnaHormiga) != 0)
-                    direccion = 1;
-                
-                break;
-                
-            case 2:
-                
-                if (comparacionPorAbajo(filaHormiga, columnaHormiga) != 0)
-                    direccion = 2;
-                
-                if (comparacionPorIzquierda(filaHormiga, columnaHormiga) != 0)
-                    direccion = 4;
-                
-                if (comparacionPorDerecha(filaHormiga, columnaHormiga) != 0)
-                    direccion = 3;
-                
-                if (comparacionPorArriba(filaHormiga, columnaHormiga) != 0)
-                    direccion = 1;
-                
-                break;
-                
-            case 3:
-                if (comparacionPorArriba(filaHormiga, columnaHormiga) != 0)
-                    direccion = 1;
-                
-                if (comparacionPorDerecha(filaHormiga, columnaHormiga) != 0)
-                    direccion = 3;
-                
-                if (comparacionPorIzquierda(filaHormiga, columnaHormiga) != 0)
-                    direccion = 4;
-                
-                if (comparacionPorAbajo(filaHormiga, columnaHormiga) != 0)
-                    direccion = 2;
-                
-                break;
-            
-            case 4:
-                if (comparacionPorArriba(filaHormiga, columnaHormiga) != 0)
-                    direccion = 1;
-                
-                if (comparacionPorIzquierda(filaHormiga, columnaHormiga) != 0)
-                    direccion = 4;
-                
-                if (comparacionPorDerecha(filaHormiga, columnaHormiga) != 0)
-                    direccion = 3;
-                
-                if (comparacionPorAbajo(filaHormiga, columnaHormiga) != 0)
-                    direccion = 2;
-                
-                break;
-        }
-        return direccion;
-    }
-    
-    public static int hayAmenazaCercaDefensores(int fila, int columna, int radio){
+    @Override
+    public int hayAmenazaCerca(int radio){
         int contador;
         int direccion = 0;
            
@@ -216,62 +142,62 @@ public class Defensores extends AgenteBase{
         return direccion;
     }
     
-    public static int dirDeAmenaza(int filaHormiga, int columnaHormiga){
+    public int dirDeAmenaza(){
         int direccion = 0;
     
         // Revision hacia arriba
-        if (filaHormiga != 0){
-            if (Ventana.tablero[filaHormiga-1][columnaHormiga].getBackground().equals(Amenazas.fondoAmenaza)){
+        if (fila != 0){
+            if (Ventana.tablero[fila-1][columna].getBackground().equals(Amenazas.fondoAmenaza)){
                 direccion = 1;
             }
         }
         
         // Revision hacia abajo
-        if (filaHormiga != 49){
-            if (Ventana.tablero[filaHormiga+1][columnaHormiga].getBackground().equals(Amenazas.fondoAmenaza)){
+        if (fila != 49){
+            if (Ventana.tablero[fila+1][columna].getBackground().equals(Amenazas.fondoAmenaza)){
                 direccion = 2;
             }
         }
         
         // Revision hacia derecha
-        if (columnaHormiga != 49){
-            if (Ventana.tablero[filaHormiga][columnaHormiga+1].getBackground().equals(Amenazas.fondoAmenaza)){
+        if (fila != 49){
+            if (Ventana.tablero[fila][columna+1].getBackground().equals(Amenazas.fondoAmenaza)){
                 direccion = 3;
             }
         }
         
         // Revision hacia izquierda
-        if (filaHormiga != 0){
-            if (Ventana.tablero[filaHormiga][columnaHormiga-1].getBackground().equals(Amenazas.fondoAmenaza)){
+        if (fila != 0){
+            if (Ventana.tablero[fila][columna-1].getBackground().equals(Amenazas.fondoAmenaza)){
                 direccion = 4;
             }
         }
         return direccion;
     }
     
-    public static void atacandoAmenaza(int filaHormiga, int columnaHormiga, int direccionDeAtaque){
+    public void atacandoAmenaza(int direccionDeAtaque){
         
-        for (int i=0; i < 7; i++){
+        for (int i=0; i < 7; i++){ 
             Amenazas amenazaActual = Simulacion.GetlistaAmenazas()[i];
             
             switch(direccionDeAtaque){
                 case 1:
-                    if (filaHormiga - 1 == amenazaActual.fila && columnaHormiga == amenazaActual.columna){
+                    if (fila - 1 == amenazaActual.fila && columna == amenazaActual.columna){
                         amenazaActual.vida -= 1;
                     }
                     break;
                 case 2:
-                    if (filaHormiga + 1 == amenazaActual.fila && columnaHormiga == amenazaActual.columna){
+                    if (fila + 1 == amenazaActual.fila && columna == amenazaActual.columna){
                         amenazaActual.vida -= 1;
                     }
                     break;
                 case 3:
-                    if (filaHormiga == amenazaActual.fila && columnaHormiga + 1 == amenazaActual.columna){
+                    if (fila == amenazaActual.fila && columna + 1 == amenazaActual.columna){
                         amenazaActual.vida -= 1;
                     }
                     break;
                 case 4:
-                    if (filaHormiga == amenazaActual.fila && columnaHormiga - 1 == amenazaActual.columna){
+                    if (fila == amenazaActual.fila && columna - 1 == amenazaActual.columna){
                         amenazaActual.vida -= 1;
                     }
                     break;
@@ -279,15 +205,13 @@ public class Defensores extends AgenteBase{
             
             // Eliminar y Regenerar una nueva amenaza
             if (Amenazas.amenazaEliminada(amenazaActual)){
-                int fila = 0;
-                int columna = 0;
                 
                 while(true){
-                    fila = (int) (Math.random() * (42-4) + 4);
-                    columna= (int) (Math.random() * (47-4) + 4);
+                    int nuevaFila = (int) (Math.random() * (42-4) + 4);
+                    int nuevaColumna= (int) (Math.random() * (47-4) + 4);
 
-                    if (casillaVacia(fila,columna)){
-                        Simulacion.GetlistaAmenazas()[i] = new Amenazas(fila, columna);
+                    if (casillaVacia(nuevaFila,nuevaColumna)){
+                        Simulacion.GetlistaAmenazas()[i] = new Amenazas(nuevaFila, nuevaColumna);
                         break;
                     }
                 }
@@ -295,6 +219,59 @@ public class Defensores extends AgenteBase{
         }
     }
     
+    @Override
+    public void recorrerListaHormigas(){
+        boolean llevaraRecurso = false;
+        Defensores defensoraActual;
+        Defensores[] listaDefensores = Simulacion.GetlistaDefensores();
+           
+        // Recorrer lista Defensores
+        for (int posicion=0; posicion < 8; posicion++){
+            defensoraActual = listaDefensores[posicion];
+            
+            if (defensoraActual.estadoRecurso && Defensores.llegoABase(defensoraActual.fila, defensoraActual.columna)){
+                 defensoraActual.estadoRecurso = false;
+                 //contadoraca
+            }
+            
+            int dirCasoAmenazaD = defensoraActual.hayAmenazaCerca(3);
+            
+            if (dirCasoAmenazaD == 0){
+                if ( !(defensoraActual.estadoRecurso) && defensoraActual.llevaRecurso(defensoraActual.rangoHormiga(3))){
+                    llevaraRecurso = true;
+                }        
+            }
+
+            // Tipos de movimiento
+            if (dirCasoAmenazaD != 0 && defensoraActual.estadoRecurso == false){  // Acercarse a amenaza
+                
+                if (defensoraActual.dirDeAmenaza() != 0)
+                    defensoraActual.atacandoAmenaza(defensoraActual.dirDeAmenaza());
+                
+                defensoraActual.moverAgente(dirCasoAmenazaD);
+            }
+            else if (defensoraActual.estadoRecurso){
+                defensoraActual.moverAgente(defensoraActual.volverABase());
+                
+            }
+            else{
+                defensoraActual.moverAgente(defensoraActual.rangoHormiga(3)); // ARREGLAR EL DE MOVER AGENTE
+            }
+            
+            if (llevaraRecurso){
+                defensoraActual.estadoRecurso = true;
+                Simulacion.SetContador(Simulacion.GetContador()+1);
+            }
+            llevaraRecurso = false;
+        }
+        
+        if (Simulacion.GetContador() == 10){
+            Recursos generarRecursos = new Recursos(1);
+            Simulacion.SetContador(0);
+        }
+    } 
+            
+            
     public static boolean casillaVacia(int fila, int columna){
         return Ventana.tablero[fila][columna].getBackground().equals(Ventana.colorTablero);
     }

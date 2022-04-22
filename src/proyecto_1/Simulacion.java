@@ -23,9 +23,9 @@ public class Simulacion {
         crearRecolectores();
         crearDefensores();
         generarBase = new Base();
-        generarRecursos = new Recursos(5);
-        generarObstaculos = new Obstaculos();
-        System.out.println("Fila " + listaAmenazas[5].fila + "Columna " + listaAmenazas[5].columna);
+        generarObstaculos = new Obstaculos(12);
+        generarRecursos = new Recursos(6);
+        System.out.println("Fila " + listaDefensores[0].fila + "Columna " + listaDefensores[0].columna); // BORRAR
     }
     
     public boolean verificarEspacio(int fila, int columna){

@@ -3,10 +3,8 @@ import javax.swing.ImageIcon;
 import java.awt.Color;
 
 public class Amenazas extends Objetos{
-    int fila;
-    int columna;
     int vida;
-    ImageIcon imagenAmenaza;
+    private ImageIcon imagenAmenaza;
     public static Color fondoAmenaza;
     
 
@@ -19,6 +17,7 @@ public class Amenazas extends Objetos{
         pintar(fila, columna);
     }
 
+    @Override
     public void pintar(int fila, int columna) {
         Ventana.tablero[fila][columna].setBackground(fondoAmenaza);
         Ventana.tablero[fila][columna].setIcon(imagenAmenaza);
