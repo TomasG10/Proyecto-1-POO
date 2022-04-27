@@ -2,7 +2,6 @@
 package proyecto_1;
 
 abstract class Objetos {
-
     int fila;
     int columna;
     
@@ -10,7 +9,7 @@ abstract class Objetos {
     public Objetos(){
     }
 
-    public boolean hayEspacio(int fila, int columna){
+    public boolean hayEspacio(){
         return false;
     }
 

@@ -12,7 +12,7 @@ public class Amenazas extends Objetos{
         this.fila = fila;
         this.columna = columna;
         this.vida = 10;
-        imagenAmenaza = new ImageIcon("fuego.jpg");
+        imagenAmenaza = new ImageIcon("Imagenes/fuego.jpg");
         fondoAmenaza = new java.awt.Color(255,128,0);
         pintar(fila, columna);
     }
@@ -23,12 +23,9 @@ public class Amenazas extends Objetos{
         Ventana.tablero[fila][columna].setIcon(imagenAmenaza);
     }
     
-    public static boolean amenazaEliminada(Amenazas amenaza){
+    public  boolean amenazaEliminada(){
         
-        if (amenaza.vida == 0){
-            int fila = amenaza.fila;
-            int columna = amenaza.columna;
-            
+        if (vida == 0){     
             Ventana.tablero[fila][columna].setBackground(Ventana.colorTablero);
             Ventana.tablero[fila][columna].setIcon(Ventana.fondo);
             
@@ -36,5 +33,21 @@ public class Amenazas extends Objetos{
         }
         
         return false;
+    }
+    
+    public static boolean hayEspacioAmenazas(int fila, int columna) {
+        
+        for (int f=0; f<8; f++){
+            if (!Ventana.tablero[fila][columna-f].getBackground().equals(Ventana.colorTablero) || !Ventana.tablero[fila][columna+f].getBackground().equals(Ventana.colorTablero))
+            {
+            return false;
+            }
+
+            if (!Ventana.tablero[fila+f][columna].getBackground().equals(Ventana.colorTablero) || !Ventana.tablero[fila-f][columna].getBackground().equals(Ventana.colorTablero))
+            {
+            return false;
+            }
+        }
+        return true;
     }
 }

@@ -16,9 +16,9 @@ public class Ventana implements ActionListener{
     private JPanel matriz;
     private JPanel panelBoton;
     private JButton btnSiguiente;
-    public static Color colorTablero = new java.awt.Color(238,183,29);
     private static Color colorFondo = new java.awt.Color(160,160,160);
-    public static ImageIcon fondo = new ImageIcon("tierra.jpg") ;
+    public static Color colorTablero = new java.awt.Color(238,183,29);
+    public static ImageIcon fondo = new ImageIcon("Imagenes/tierra.jpg") ;
     
     public static JButton tablero[][] = new JButton[50][50];
 
@@ -49,21 +49,20 @@ public class Ventana implements ActionListener{
                 matriz.setVisible(true);
             }
         }
-    ventana.setBounds(250, 20, 1000, 800);
-    matriz.setBounds(300, 300, 800, 720);
-    matriz.setBorder(new LineBorder(Color.BLACK));
-    ventana.setVisible(true);
-    panelBoton.setLayout(new GridLayout(1, 1));
-    panelBoton.add(btnSiguiente);
-    ventana.add(panelBoton, BorderLayout.SOUTH);
+        ventana.setBounds(250, 20, 1000, 800);
+        matriz.setBounds(300, 300, 800, 720);
+        matriz.setBorder(new LineBorder(Color.BLACK));
+        ventana.setVisible(true);
+        panelBoton.setLayout(new GridLayout(1, 1));
+        panelBoton.add(btnSiguiente);
+        ventana.add(panelBoton, BorderLayout.SOUTH);
     }
     
     @Override
     public void actionPerformed(ActionEvent e) {
        
         if (e.getSource() == btnSiguiente){
-            Simulacion.GetlistaDefensores()[1].recorrerListaHormigas(); // En estos casos deberia de ser static la funcion o con cual estancia se llama al metodo? (En el metodo lo que se hace es que se llama toda la lista)
-            Simulacion.GetlistaRecolectores()[1].recorrerListaHormigas(); // En estos casos deberia de ser static la funcion o con cual estancia se llama al metodo? (En el metodo lo que se hace es que se llama toda la lista)
+            Simulacion.recorrerListaHormigas();
         }
     }
 }

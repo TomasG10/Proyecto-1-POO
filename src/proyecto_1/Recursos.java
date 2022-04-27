@@ -8,7 +8,7 @@ public class Recursos extends Objetos{
     public static Color fondoRecurso = new Color(0,255,128);
     
     public Recursos(int cantidadRecursos){
-        imagenRecurso = new ImageIcon("recurso.jpg");
+        imagenRecurso = new ImageIcon("Imagenes/recurso.jpg");
         generar(cantidadRecursos);
     }
     
@@ -19,7 +19,7 @@ public class Recursos extends Objetos{
             fila = (int) (Math.random()*(42-4) + 4);
             columna= (int) (Math.random()*(47-4) + 4);
 
-            if (hayEspacio(fila,columna)){
+            if (hayEspacio()){
                 pintar(fila,columna);
                 contador ++;
             }
@@ -27,7 +27,7 @@ public class Recursos extends Objetos{
     }
 
     @Override
-    public boolean hayEspacio(int fila, int columna) {
+    public boolean hayEspacio() {
         
         // Revisando fila de arriba (Esto con el fin de que no queden pegados objetos)
         for (int pos=-1; pos<3; pos++){

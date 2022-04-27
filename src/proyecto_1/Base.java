@@ -5,7 +5,7 @@ import javax.swing.ImageIcon;
 public class Base {
     private int randEsquina;
     public static Color fondoBase = new java.awt.Color(102,0,102);
-    private ImageIcon imagenBase = new ImageIcon("base.jpg"); 
+    private ImageIcon imagenBase = new ImageIcon("Imagenes/base.jpg"); 
     public static int fila;
     public static int columna;
     

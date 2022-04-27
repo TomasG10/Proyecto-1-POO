@@ -3,16 +3,16 @@ package proyecto_1;
 import javax.swing.ImageIcon;
 import java.awt.Color;
 
-abstract class AgenteBase {
+public class AgenteBase {
     int fila;
     int columna;
-    int alejarHormiga;
+    int filaRecurso;
+    int columnaRecurso;
     boolean estadoRecurso;
     ImageIcon tipoHormiga;
     Color fondoHormiga;
 
     public AgenteBase(){
-
     }
 
     public void pintarAgente(int fila, int columna, ImageIcon tipoHormiga, Color fondoHormiga){
@@ -41,7 +41,6 @@ abstract class AgenteBase {
             switch(direccion){
                 case 1: // Arriba
                     if (fila != 0){
-                        
                         if (verificarEspacio(fila-1,columna)){
                             Ventana.tablero[fila][columna].setBackground(Ventana.colorTablero);
                             Ventana.tablero[fila][columna].setIcon(Ventana.fondo);
@@ -50,6 +49,9 @@ abstract class AgenteBase {
                             Ventana.tablero[fila][columna].setBackground(fondoHormiga);
                             Ventana.tablero[fila][columna].setIcon(tipoHormiga);
                             realizado = true;
+                        }
+                        else{
+                            movimiento = 0;
                         }
                     }
                     break;
@@ -65,6 +67,9 @@ abstract class AgenteBase {
                             Ventana.tablero[fila][columna].setIcon(tipoHormiga);
                             realizado = true;
                         }
+                        else{
+                            movimiento = 0;
+                        }
                     }
                     break;
                 
@@ -79,6 +84,9 @@ abstract class AgenteBase {
                             Ventana.tablero[fila][columna].setIcon(tipoHormiga);
                             realizado = true;
                         }
+                        else{
+                            movimiento = 0;
+                        }
                     }
                     break;
                 
@@ -92,7 +100,9 @@ abstract class AgenteBase {
                             Ventana.tablero[fila][columna].setBackground(fondoHormiga);
                             Ventana.tablero[fila][columna].setIcon(tipoHormiga);
                             realizado = true;
-
+                        }
+                        else{
+                            movimiento = 0;
                         }
                     }
                     break;
@@ -108,7 +118,7 @@ abstract class AgenteBase {
         return 0;
     }
     
-    public void recorrerListaHormigas(){
+    public void comportamientoHormiga(){
     }
     
     public boolean verificarEspacio(int fila, int columna){
@@ -185,6 +195,50 @@ abstract class AgenteBase {
         return direccion;
     }
 
+    public int irHaciaRecurso(){
+        
+        int direccion = 0;
+        
+        if (filaRecurso > fila){
+            if (comparacionPorAbajo(fila, columna) != 0)
+                direccion = 2;
+            else{
+                filaRecurso = 0;
+                columnaRecurso = 0;
+            }
+        }
+
+
+        else if (filaRecurso < fila){
+            if (comparacionPorArriba(fila, columna) != 0)
+                direccion = 1;
+            else{
+                filaRecurso = 0;
+                columnaRecurso = 0;
+            }
+        }
+        
+        else if (columnaRecurso > columna){
+            if (comparacionPorDerecha(fila, columna) != 0)
+                direccion = 3;
+            else{
+                filaRecurso = 0;
+                columnaRecurso = 0;
+            }
+        }
+
+        else if (columnaRecurso < columna){
+            if (comparacionPorIzquierda(fila, columna) != 0)
+                direccion = 4; 
+            else{
+                filaRecurso = 0;
+                columnaRecurso = 0;
+            }
+        }
+        
+    return direccion;
+    }
+    
     public static int comparacionPorArriba(int filaHormiga, int columnaHormiga){
         if (filaHormiga > 0){
             if (Ventana.tablero[filaHormiga-1][columnaHormiga].getBackground().equals(Ventana.colorTablero)){
@@ -221,7 +275,6 @@ abstract class AgenteBase {
         return 0;
     }
 
-
     public static boolean llegoABase(int filaHormiga, int columnaHormiga){
         
         int base = Base.conocerBase();
@@ -247,22 +300,104 @@ abstract class AgenteBase {
         return false;
     }
     
-    public boolean llevaRecurso(int direccion){
+    public void detectarHormigaConRecurso(int radio){
+ 
+        int contador;
+        
+        if (filaRecurso == 0 && columnaRecurso == 0){
+            
+            // Revision hacia Arriba
+            for (contador = 1; contador <= radio; contador++){
+                if (fila - contador >= 0){
+                   if (Ventana.tablero[fila-contador][columna].getBackground().equals(fondoHormiga)){
+                       llevaHormigaRecurso(fila - contador, columna);
+                   }
+                }
+            }
+
+            // Revision hacia abajo (Revisar que no se este saliendo de los margenes del tablero)
+            for (contador = 1; contador <= radio; contador++){
+                if (fila + contador <= 49){
+                   if (Ventana.tablero[fila+contador][columna].getBackground().equals(fondoHormiga)){
+                       llevaHormigaRecurso(fila + contador, columna);
+                   }
+                }
+            }
+
+            // Revision hacia derecha (Revisar que no se este saliendo de los margenes del tablero)
+            for (contador = 1; contador <= radio; contador++){
+                if (columna + contador <= 49){
+                   if (Ventana.tablero[fila][columna+contador].getBackground().equals(fondoHormiga)){
+                       llevaHormigaRecurso(fila, columna + contador);      
+                   }
+                }
+            }
+
+            // Revision hacia izquierda (Revisar que no se este saliendo de los margenes del tablero)
+            for (contador = 1; contador <= radio; contador++){
+                if (columna - contador >= 0){
+                   if (Ventana.tablero[fila][columna-contador].getBackground().equals(fondoHormiga)){
+                       llevaHormigaRecurso(fila, columna - contador);
+
+                   }
+                }
+            }
+        }
+
+    }
+    
+    public void llevaHormigaRecurso(int fila, int columna){
+        
+       AgenteBase[] hormigas = Simulacion.GetlistaHormigas();
+       AgenteBase hormigaActual;
+       
+        for (int i=0; i < 16; i++){
+            hormigaActual = hormigas[i];
+             if (hormigaActual.fila == fila  && hormigaActual.columna == columna){
+                 if (hormigaActual.estadoRecurso){
+                     this.filaRecurso = hormigaActual.filaRecurso;
+                     this.columnaRecurso = hormigaActual.columnaRecurso;
+                 }
+             }
+        }
+    }
+    
+    public void llegoAPosicionRecurso(){
+    
+        if (fila == filaRecurso && columna == columnaRecurso){
+            filaRecurso = 0;
+            columnaRecurso = 0;
+        }
+    }
+    
+    public int llevaRecurso(int direccion){
+        
      
         switch (direccion) {
             case 1: // Arriba
-                return Ventana.tablero[fila-1][columna].getBackground().equals(Recursos.fondoRecurso);
+                if (Ventana.tablero[fila-1][columna].getBackground().equals(Recursos.fondoRecurso)){
+                    return direccion;
+                }
+                break;
              
             case 2: // Abajo
-                return Ventana.tablero[fila+1][columna].getBackground().equals(Recursos.fondoRecurso);
+                if (Ventana.tablero[fila+1][columna].getBackground().equals(Recursos.fondoRecurso)){
+                    return direccion;
+                }
+                break;
                 
             case 3: // Derecha
-                return Ventana.tablero[fila][columna+1].getBackground().equals(Recursos.fondoRecurso);
+                if (Ventana.tablero[fila][columna+1].getBackground().equals(Recursos.fondoRecurso)){
+                    return direccion;
+                }
+                break;
                 
             case 4: // Izquierda
-                return Ventana.tablero[fila][columna-1].getBackground().equals(Recursos.fondoRecurso);
-        
+                if (Ventana.tablero[fila][columna-1].getBackground().equals(Recursos.fondoRecurso)){
+                    return direccion;
+                }
+                break;
         }
-        return false; 
+        return 0; 
     } 
 }

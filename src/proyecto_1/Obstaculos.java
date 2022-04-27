@@ -7,7 +7,7 @@ public class Obstaculos extends Objetos{
     public static Color fondoObstaculo = new Color(192,192,192);
     
     public Obstaculos(int cantidad){
-        imagenObstaculo = new ImageIcon("piedra.jpg");
+        imagenObstaculo = new ImageIcon("Imagenes/piedra.jpg");
         generar(cantidad);
     }
     
@@ -18,7 +18,7 @@ public class Obstaculos extends Objetos{
             fila = (int) (Math.random()*(42-2) + 2);
             columna= (int) (Math.random()*(42-2) + 2);
             
-            if (hayEspacio(fila,columna)){ 
+            if (hayEspacio()){ 
                 pintar(fila,columna);
                 contador ++;
             }
@@ -26,7 +26,7 @@ public class Obstaculos extends Objetos{
     }
 
     @Override
-    public boolean hayEspacio(int fila, int columna) {
+    public boolean hayEspacio() {
         
         // Revisando fila de arriba (Esto con el fin de que no queden pegados objetos)
         for (int pos=-1; pos<4; pos++){

@@ -9,23 +9,20 @@ public class Simulacion {
     private AgenteBase defensoras;
     private Amenazas amenazas;
     private static int contadorRecursos = 0;
-    private static Recolectores[] listaRecolectores;
-    private static Defensores[] listaDefensores;
+    private static AgenteBase[] listaHormigas;
     private static Amenazas[] listaAmenazas;
     
     
     public Simulacion(){
-        listaRecolectores = new Recolectores[8];
-        listaDefensores = new Defensores[8];
+        listaHormigas = new AgenteBase[16];
         listaAmenazas = new Amenazas[7];
         Prueba = new Ventana();
-        generarAmenazas();
-        crearRecolectores();
-        crearDefensores();
         generarBase = new Base();
         generarObstaculos = new Obstaculos(12);
         generarRecursos = new Recursos(6);
-        System.out.println("Fila " + listaDefensores[0].fila + "Columna " + listaDefensores[0].columna); // BORRAR
+        generarAmenazas();
+        crearRecolectores();
+        crearDefensores();
     }
     
     public boolean verificarEspacio(int fila, int columna){
@@ -40,21 +37,21 @@ public class Simulacion {
             int columna = (int) (Math.random()*(49-1) + 1);
 
             if (verificarEspacio(fila,columna)){
-                listaRecolectores[contador] = new Recolectores(fila,columna);
+                listaHormigas[contador] = new Recolectores(fila,columna);
                 contador ++;
             }
         }
     }
     
     private void crearDefensores (){
-        int contador = 0;
+        int contador = 8;
 
-        while(contador < 8){
+        while(contador < 16){
             int fila = (int) (Math.random()*(49-1) + 1);
             int columna = (int) (Math.random()*(49-1) + 1);
 
             if (verificarEspacio(fila,columna)){
-                listaDefensores[contador] = new Defensores(fila,columna);
+                listaHormigas[contador] = new Defensores(fila,columna);
                 contador ++;
             }
         }
@@ -66,22 +63,24 @@ public class Simulacion {
         int columna = 0;
         
         while (contador < 7){
-            fila = (int) (Math.random() * (42-4) + 4);
-            columna= (int) (Math.random() * (47-4) + 4);
+            fila = (int) (Math.random() * (42-9) + 9);
+            columna= (int) (Math.random() * (40-9) + 9);
 
-            if (verificarEspacio(fila,columna)){
+            if (Amenazas.hayEspacioAmenazas(fila,columna)){
                 listaAmenazas[contador] = new Amenazas(fila, columna);
                 contador ++;
             }
         }
     }
-
-    public static Recolectores[] GetlistaRecolectores(){
-        return listaRecolectores;
-    }
     
-    public static Defensores[] GetlistaDefensores(){
-        return listaDefensores;
+    public static void recorrerListaHormigas(){
+        for (int posicion = 0; posicion < 16; posicion++){
+            listaHormigas[posicion].comportamientoHormiga();
+        }
+    }
+
+    public static AgenteBase[] GetlistaHormigas(){
+        return listaHormigas;
     }
     
     public static Amenazas[] GetlistaAmenazas(){
